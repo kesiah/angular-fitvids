@@ -42,33 +42,35 @@ angular.module('fitVids', []).directive('fitVids', [function() {
                 selectors.push(attr.customSelector);
             }
 
-            videos = element[0].querySelectorAll(selectors.join(','));
+            angular.element(document).ready(function() {
 
-            angular.forEach(videos, function (item) {
+                videos = element[0].querySelectorAll(selectors.join(','));
 
-                var $item = angular.element(item);
-                var height, width, aspectRatio;
+                angular.forEach(videos, function (item) {
 
-                if (item.tagName.toLowerCase() === 'embed' &&
-                        ($item.parent().tagName === 'object' && $item.parent().length) ||
-                        $item.parent().hasClass('.fluid-width-video-wrapper')) {
-                    return;
-                }
+                    var $item = angular.element(item);
+                    var height, width, aspectRatio;
 
-                height = (item.tagName.toLowerCase() === 'object' || $item.attr('height')) ? parseInt($item.attr('height'), 10) : $item.height();
-                width = !isNaN(parseInt($item.attr('width'), 10)) ? parseInt($item.attr('width'), 10) : $item.width();
-                aspectRatio = height / width;
+                    if (item.tagName.toLowerCase() === 'embed' &&
+                            ($item.parent().tagName === 'object' && $item.parent().length) ||
+                            $item.parent().hasClass('.fluid-width-video-wrapper')) {
+                        return;
+                    }
 
-                if (!$item.attr('id')) {
-                    var videoID = 'fitvid' + Math.floor(Math.random()*999999);
-                    $item.attr('id', videoID);
-                }
+                    height = (item.tagName.toLowerCase() === 'object' || $item.attr('height')) ? parseInt($item.attr('height'), 10) : $item.height();
+                    width = !isNaN(parseInt($item.attr('width'), 10)) ? parseInt($item.attr('width'), 10) : $item.width();
+                    aspectRatio = height / width;
 
-                $item.wrap('<div class="fluid-width-video-wrapper" />').parent().css('padding-top', (aspectRatio * 100) + "%");
-                $item.removeAttr('height').removeAttr('width');
+                    if (!$item.attr('id')) {
+                        var videoID = 'fitvid' + Math.floor(Math.random()*999999);
+                        $item.attr('id', videoID);
+                    }
 
+                    $item.wrap('<div class="fluid-width-video-wrapper" />').parent().css('padding-top', (aspectRatio * 100) + "%");
+                    $item.removeAttr('height').removeAttr('width');
+
+                });
             });
-
         }
     };
 
